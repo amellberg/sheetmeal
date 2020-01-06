@@ -4,8 +4,8 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    SheetWindow w;
-    w.show();
-    return a.exec();
+    QApplication app(argc, argv);
+    SheetWindow *sheet = new SheetWindow;
+    sheet->show();
+    return app.exec();
 }
