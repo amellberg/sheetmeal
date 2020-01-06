@@ -8,4 +8,3 @@ SheetWindow::SheetWindow(QWidget *parent)
 SheetWindow::~SheetWindow()
 {
 }
-

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SheetWindow</class>
+ <widget class="QMainWindow" name="SheetWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>589</width>
+    <height>569</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>SheetMeal</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>589</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="sheetMenu">
+    <property name="title">
+     <string>&amp;Sheet</string>
+    </property>
+    <widget class="QMenu" name="recentMenu">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Recent</string>
+     </property>
+    </widget>
+    <addaction name="newSheetAction"/>
+    <addaction name="openAction"/>
+    <addaction name="recentMenu"/>
+    <addaction name="separator"/>
+    <addaction name="saveAsAction"/>
+    <addaction name="separator"/>
+    <addaction name="clearSheetAction"/>
+    <addaction name="refreshAction"/>
+    <addaction name="closeAction"/>
+    <addaction name="separator"/>
+    <addaction name="quitAction"/>
+   </widget>
+   <widget class="QMenu" name="mealMenu">
+    <property name="title">
+     <string>&amp;Meal</string>
+    </property>
+    <addaction name="newMealAction"/>
+    <addaction name="duplicateAction"/>
+    <addaction name="separator"/>
+    <addaction name="deleteAction"/>
+    <addaction name="clearMealAction"/>
+    <addaction name="separator"/>
+    <addaction name="addFoodAction"/>
+   </widget>
+   <widget class="QMenu" name="optionsMenu">
+    <property name="title">
+     <string>&amp;Options</string>
+    </property>
+    <addaction name="rememberSheetAction"/>
+   </widget>
+   <widget class="QMenu" name="helpMenu">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="instructionsAction"/>
+    <addaction name="separator"/>
+    <addaction name="aboutAction"/>
+   </widget>
+   <addaction name="sheetMenu"/>
+   <addaction name="mealMenu"/>
+   <addaction name="optionsMenu"/>
+   <addaction name="helpMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="newSheetAction">
+   <property name="text">
+    <string>&amp;New</string>
+   </property>
+  </action>
+  <action name="instructionsAction">
+   <property name="text">
+    <string>&amp;Instructions</string>
+   </property>
+  </action>
+  <action name="aboutAction">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="openAction">
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+  </action>
+  <action name="saveAsAction">
+   <property name="text">
+    <string>&amp;Save As...</string>
+   </property>
+  </action>
+  <action name="clearSheetAction">
+   <property name="text">
+    <string>&amp;Clear...</string>
+   </property>
+  </action>
+  <action name="refreshAction">
+   <property name="text">
+    <string>R&amp;efresh</string>
+   </property>
+  </action>
+  <action name="closeAction">
+   <property name="text">
+    <string>C&amp;lose</string>
+   </property>
+  </action>
+  <action name="quitAction">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+  </action>
+  <action name="actionDeff_sht">
+   <property name="text">
+    <string>Deff.sht</string>
+   </property>
+  </action>
+  <action name="newMealAction">
+   <property name="text">
+    <string>&amp;New</string>
+   </property>
+  </action>
+  <action name="duplicateAction">
+   <property name="text">
+    <string>D&amp;uplicate</string>
+   </property>
+  </action>
+  <action name="addFoodAction">
+   <property name="text">
+    <string>Add &amp;Food...</string>
+   </property>
+  </action>
+  <action name="clearMealAction">
+   <property name="text">
+    <string>&amp;Clear...</string>
+   </property>
+  </action>
+  <action name="deleteAction">
+   <property name="text">
+    <string>&amp;Delete...</string>
+   </property>
+  </action>
+  <action name="rememberSheetAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Remember Sheet</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
