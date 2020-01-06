@@ -17,7 +17,10 @@ public:
 
 private:
     void setupActions();
+    void createToolBars();
 
+    QToolBar *sheetToolBar;
     Ui::SheetWindow *ui;
 };
+
 #endif // SHEETWINDOW_H

@@ -1,3 +1,5 @@
+#include <QToolBar>
+
 #include "sheetwindow.h"
 #include "ui_sheetwindow.h"
 
@@ -6,6 +8,7 @@ SheetWindow::SheetWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setupActions();
+    createToolBars();
 }
 
 SheetWindow::~SheetWindow()
@@ -50,4 +53,11 @@ void SheetWindow::setupActions()
     ui->quitAction->setStatusTip(tr("Close all windows and exit"));
     ui->quitAction->setShortcut(QKeySequence::Quit);
     //connect.....
+}
+
+void SheetWindow::createToolBars()
+{
+    sheetToolBar = addToolBar(tr("&Sheet"));
+    sheetToolBar->addAction(ui->newSheetAction);
+    sheetToolBar->addAction(ui->openAction);
 }
