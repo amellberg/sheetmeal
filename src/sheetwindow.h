@@ -16,6 +16,8 @@ public:
     ~SheetWindow();
 
 private:
+    void setupActions();
+
     Ui::SheetWindow *ui;
 };
 #endif // SHEETWINDOW_H
