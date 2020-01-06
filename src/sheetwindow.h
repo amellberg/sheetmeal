@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 
+namespace Ui {
+    class SheetWindow;
+}
+
 class SheetWindow : public QMainWindow
 {
     Q_OBJECT
@@ -10,5 +14,8 @@ class SheetWindow : public QMainWindow
 public:
     SheetWindow(QWidget *parent = nullptr);
     ~SheetWindow();
+
+private:
+    Ui::SheetWindow *ui;
 };
 #endif // SHEETWINDOW_H

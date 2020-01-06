@@ -17,10 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    sheetwindow.cpp
+    mealtable.cpp \
+    sheetwindow.cpp \
+    totalstable.cpp
 
 HEADERS += \
-    sheetwindow.h
+    mealtable.h \
+    sheetwindow.h \
+    totalstable.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
