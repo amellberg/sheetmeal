@@ -7,6 +7,8 @@ namespace Ui {
     class SheetWindow;
 }
 
+class QComboBox;
+
 class SheetWindow : public QMainWindow
 {
     Q_OBJECT
@@ -19,8 +21,9 @@ private:
     void setupActions();
     void createToolBars();
 
-    QToolBar *sheetToolBar;
     Ui::SheetWindow *ui;
+    QToolBar *sheetToolBar;
+    QComboBox *mealComboBox;
 };
 
 #endif // SHEETWINDOW_H

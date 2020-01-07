@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>671</width>
-    <height>694</height>
+    <width>515</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>671</width>
+     <width>515</width>
      <height>25</height>
     </rect>
    </property>
@@ -66,8 +66,8 @@
     <addaction name="newMealAction"/>
     <addaction name="duplicateAction"/>
     <addaction name="separator"/>
-    <addaction name="deleteAction"/>
     <addaction name="clearMealAction"/>
+    <addaction name="deleteAction"/>
     <addaction name="separator"/>
     <addaction name="addFoodAction"/>
    </widget>
@@ -163,6 +163,9 @@
   </action>
   <action name="rememberSheetAction">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="text">
