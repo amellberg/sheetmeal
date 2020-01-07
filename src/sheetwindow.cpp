@@ -69,13 +69,20 @@ void SheetWindow::setupActions()
 
     ui->deleteAction->setIcon(QIcon::fromTheme("edit-delete"));
     ui->deleteAction->setStatusTip(tr("Remove selected meal from the sheet"));
+//    ui->deleteAction->setEnabled(false);
 
     ui->clearMealAction->setIcon(QIcon::fromTheme("edit-clear"));
     ui->clearMealAction->setStatusTip(tr("Remove all food items from the meal"));
 
     ui->addFoodAction->setIcon(QIcon::fromTheme("list-add"));
-    ui->addFoodAction->setStatusTip(tr("Add food to the meal"));
+    ui->addFoodAction->setStatusTip(tr("Add food items to the selected meal"));
     ui->addFoodAction->setShortcut(QKeySequence::fromString("insert"));
+//    ui->addFoodAction->setEnabled(false);
+
+    ui->removeFoodAction->setIcon(QIcon::fromTheme("list-remove"));
+    ui->removeFoodAction->setStatusTip(tr("Remove selected food items from meal"));
+    ui->removeFoodAction->setShortcut(QKeySequence::fromString("delete"));
+//    ui->removeFoodAction->setEnabled(false);
 }
 
 void SheetWindow::createToolBars()
@@ -87,6 +94,7 @@ void SheetWindow::createToolBars()
 //    sheetToolBar->addSeparator();
 //    sheetToolBar->addAction(ui->clearSheetAction);
     sheetToolBar->addAction(ui->refreshAction);
+    sheetToolBar->setHidden(true);
 
     mealToolBar = addToolBar(tr("&Meal"));
     mealComboBox = new QComboBox;
@@ -98,4 +106,5 @@ void SheetWindow::createToolBars()
     mealToolBar->addAction(ui->newMealAction);
     mealToolBar->addAction(ui->deleteAction);
     mealToolBar->addAction(ui->addFoodAction);
+    mealToolBar->addAction(ui->removeFoodAction);
 }

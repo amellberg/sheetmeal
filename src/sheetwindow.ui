@@ -73,6 +73,7 @@
     <addaction name="deleteAction"/>
     <addaction name="separator"/>
     <addaction name="addFoodAction"/>
+    <addaction name="removeFoodAction"/>
    </widget>
    <widget class="QMenu" name="optionsMenu">
     <property name="title">
@@ -195,6 +196,11 @@
    </property>
    <property name="text">
     <string>Meal</string>
+   </property>
+  </action>
+  <action name="removeFoodAction">
+   <property name="text">
+    <string>&amp;Remove Food</string>
    </property>
   </action>
  </widget>
