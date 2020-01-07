@@ -68,7 +68,7 @@ void SheetWindow::setupActions()
     ui->duplicateAction->setStatusTip(tr("Duplicate the current meal"));
 
     ui->deleteAction->setIcon(QIcon::fromTheme("edit-delete"));
-    ui->deleteAction->setStatusTip(tr("Remove the meal from the sheet"));
+    ui->deleteAction->setStatusTip(tr("Remove selected meal from the sheet"));
 
     ui->clearMealAction->setIcon(QIcon::fromTheme("edit-clear"));
     ui->clearMealAction->setStatusTip(tr("Remove all food items from the meal"));
@@ -83,8 +83,19 @@ void SheetWindow::createToolBars()
     sheetToolBar = addToolBar(tr("&Sheet"));
     sheetToolBar->addAction(ui->newSheetAction);
     sheetToolBar->addAction(ui->openAction);
-    sheetToolBar->addAction(ui->saveAsAction);
+//    sheetToolBar->addAction(ui->saveAsAction);
 //    sheetToolBar->addSeparator();
 //    sheetToolBar->addAction(ui->clearSheetAction);
     sheetToolBar->addAction(ui->refreshAction);
+
+    mealToolBar = addToolBar(tr("&Meal"));
+    mealComboBox = new QComboBox;
+    mealComboBox->setMinimumWidth(125);
+//    mealComboBox->setEnabled(false);
+    mealComboBox->addItem("Breakfast");
+    mealComboBox->addItem("Lunch");
+    mealToolBar->addWidget(mealComboBox);
+    mealToolBar->addAction(ui->newMealAction);
+    mealToolBar->addAction(ui->deleteAction);
+    mealToolBar->addAction(ui->addFoodAction);
 }

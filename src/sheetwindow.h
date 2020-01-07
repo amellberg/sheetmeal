@@ -23,6 +23,7 @@ private:
 
     Ui::SheetWindow *ui;
     QToolBar *sheetToolBar;
+    QToolBar *mealToolBar;
     QComboBox *mealComboBox;
 };
 
