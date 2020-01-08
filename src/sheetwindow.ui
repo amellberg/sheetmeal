@@ -20,9 +20,6 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="handleWidth">
-       <number>9</number>
-      </property>
       <widget class="MealTable" name="mealTable"/>
       <widget class="TotalsTable" name="totalsTable"/>
      </widget>
@@ -181,6 +178,9 @@
   </action>
   <action name="sheetToolbarAction">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="text">

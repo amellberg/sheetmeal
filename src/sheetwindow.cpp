@@ -90,11 +90,8 @@ void SheetWindow::createToolBars()
     sheetToolBar = addToolBar(tr("&Sheet"));
     sheetToolBar->addAction(ui->newSheetAction);
     sheetToolBar->addAction(ui->openAction);
-//    sheetToolBar->addAction(ui->saveAsAction);
-//    sheetToolBar->addSeparator();
-//    sheetToolBar->addAction(ui->clearSheetAction);
     sheetToolBar->addAction(ui->refreshAction);
-    sheetToolBar->setHidden(true);
+//    sheetToolBar->setHidden(true);
 
     mealToolBar = addToolBar(tr("&Meal"));
     mealComboBox = new QComboBox;
