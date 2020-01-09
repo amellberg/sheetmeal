@@ -53,6 +53,7 @@
     <addaction name="separator"/>
     <addaction name="saveAsAction"/>
     <addaction name="separator"/>
+    <addaction name="setFoodBankAction"/>
     <addaction name="clearSheetAction"/>
     <addaction name="refreshAction"/>
     <addaction name="closeAction"/>
@@ -201,6 +202,11 @@
   <action name="removeFoodAction">
    <property name="text">
     <string>&amp;Remove Food</string>
+   </property>
+  </action>
+  <action name="setFoodBankAction">
+   <property name="text">
+    <string>Set &amp;Food Bank...</string>
    </property>
   </action>
  </widget>

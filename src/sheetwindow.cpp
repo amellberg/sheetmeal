@@ -38,6 +38,8 @@ void SheetWindow::setupActions()
     ui->saveAsAction->setShortcut(QKeySequence::SaveAs);
     //connect.....
 
+    ui->setFoodBankAction->setStatusTip(tr("Specify which food bank file to use"));
+
     ui->clearSheetAction->setIcon(QIcon::fromTheme("edit-clear"));
     ui->clearSheetAction->setStatusTip(tr("Remove all meals from the sheet"));
     //connect.....
