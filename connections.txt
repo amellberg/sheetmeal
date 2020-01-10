@@ -1,8 +1,0 @@
-connect(mealToolBar, SIGNAL(mealNameChanged()), totalsModel, SLOT(update()))
-connect(ui->newMealAction, 
-
-
-Connections needed (signal --> slot)
-====================================
-MealsModel::rowsInserted --> TotalsModel::update
-(rowsInserted is inherited from QAbstractItemModel)
