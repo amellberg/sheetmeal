@@ -1,12 +1,23 @@
 #include <QComboBox>
+#include <QDebug>
+#include <QDir>
+#include <QMessageBox>
+#include <QSqlDatabase>
+#include <QTemporaryFile>
 #include <QToolBar>
+#include <QUuid>
 
 #include "sheetwindow.h"
 #include "ui_sheetwindow.h"
 
-SheetWindow::SheetWindow(QWidget *parent)
+SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::SheetWindow)
 {
+    // if default sheet is set, update sheetPath
+
+    if (!createSheetConnection(sheetPath))
+        return;
+
     ui->setupUi(this);
     setupActions();
     createToolBars();
@@ -15,6 +26,36 @@ SheetWindow::SheetWindow(QWidget *parent)
 SheetWindow::~SheetWindow()
 {
     delete ui;
+}
+
+bool SheetWindow::createSheetConnection(QString sheetPath)
+{
+    if (sheetPath.isEmpty()) {
+        // Generate a temporary filename for the sheet in system tmp dir
+        QTemporaryFile tmpFile(QDir::tempPath() + "/sheet");
+        if (!tmpFile.open()) {
+            QMessageBox::critical(
+                        nullptr, tr("Cannot initialize sheet"),
+                        tr("Unable to create a temporary sheet.\n"
+                           "Error writing to system's temporary directory."),
+                        QMessageBox::Close);
+            return false;
+        }
+        sheetPath = tmpFile.fileName();
+    }
+    QString connName = QUuid::createUuid().toString();
+//    qDebug() << QString("sheetPath = %1").arg(sheetPath);
+//    qDebug() << QString(" connName = %1").arg(connName);
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connName);
+    db.setDatabaseName(sheetPath);
+    if (!db.open()) {
+        QMessageBox::critical(
+                    nullptr, tr("Cannot initialize sheet"),
+                    tr("Unable to establish a database connection"),
+                    QMessageBox::Close);
+        return false;
+    }
+    return true;
 }
 
 void SheetWindow::setupActions()
@@ -65,7 +106,7 @@ void SheetWindow::setupActions()
     ui->newMealAction->setIcon(QIcon::fromTheme("document-new"));
     ui->newMealAction->setStatusTip(tr("Add a new meal to the sheet"));
     ui->newMealAction->setShortcut(QKeySequence::fromString("ctrl+shift+n"));
-    connect(ui->newMealAction, &QAction::triggered, mealToolBar, &MealToolBar::)
+    //connect(ui->newMealAction, &QAction::triggered, mealToolBar, &MealToolBar::)
 
     ui->duplicateAction->setIcon(QIcon::fromTheme("edit-copy"));
     ui->duplicateAction->setStatusTip(tr("Duplicate the current meal"));
@@ -108,3 +149,4 @@ void SheetWindow::createToolBars()
     mealToolBar->addAction(ui->addFoodAction);
     mealToolBar->addAction(ui->removeFoodAction);
 }
+

@@ -14,10 +14,11 @@ class SheetWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    SheetWindow(QWidget *parent = nullptr);
+    SheetWindow(QString sheetPath = QString(""), QWidget *parent = nullptr);
     ~SheetWindow();
 
 private:
+    bool createSheetConnection(QString sheetPath);
     void setupActions();
     void createToolBars();
 
