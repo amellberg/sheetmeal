@@ -4,15 +4,16 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>590</x>
-      <y>260</y>
-      <w>140</w>
+      <x>540</x>
+      <y>270</y>
+      <w>230</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>*SheetWindow*
 --
 -hasFoodBank: Boolean
 --
++SheetWindow(sheetPath = "", parent)
 -setupActions()
 -createToolBars()
 //-createConnections()
@@ -22,7 +23,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>530</x>
+      <x>540</x>
       <y>540</y>
       <w>110</w>
       <h>30</h>
@@ -33,7 +34,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>210</x>
+      <x>220</x>
       <y>460</y>
       <w>250</w>
       <h>90</h>
@@ -50,7 +51,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>730</x>
+      <x>740</x>
       <y>540</y>
       <w>120</w>
       <h>30</h>
@@ -61,7 +62,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>530</x>
+      <x>540</x>
       <y>640</y>
       <w>150</w>
       <h>70</h>
@@ -74,40 +75,40 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>560</x>
-      <y>350</y>
+      <x>580</x>
+      <y>360</y>
+      <w>30</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>460</x>
+      <y>360</y>
       <w>100</w>
-      <h>210</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;190.0;80.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;80.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>450</x>
-      <y>350</y>
-      <w>160</w>
-      <h>130</h>
+      <x>700</x>
+      <y>360</y>
+      <w>80</w>
+      <h>200</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;110.0;140.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>680</x>
-      <y>350</y>
-      <w>90</w>
-      <h>210</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>70.0;190.0;10.0;10.0</additional_attributes>
+    <additional_attributes>60.0;180.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>540</x>
+      <x>550</x>
       <y>750</y>
       <w>130</w>
       <h>30</h>
@@ -118,7 +119,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
+      <x>600</x>
       <y>700</y>
       <w>30</w>
       <h>70</h>
@@ -129,7 +130,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>580</x>
+      <x>590</x>
       <y>560</y>
       <w>30</w>
       <h>100</h>
@@ -140,8 +141,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>610</x>
-      <y>170</y>
+      <x>560</x>
+      <y>180</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -151,8 +152,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
-      <y>190</y>
+      <x>600</x>
+      <y>200</y>
       <w>30</w>
       <h>90</h>
     </coordinates>
@@ -162,7 +163,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>990</x>
+      <x>1000</x>
       <y>380</y>
       <w>140</w>
       <h>30</h>
@@ -173,7 +174,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1010</x>
+      <x>1020</x>
       <y>270</y>
       <w>100</w>
       <h>30</h>
@@ -184,7 +185,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1050</x>
+      <x>1060</x>
       <y>290</y>
       <w>30</w>
       <h>110</h>
@@ -195,18 +196,18 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>640</x>
-      <y>350</y>
-      <w>30</w>
-      <h>310</h>
+      <x>630</x>
+      <y>360</y>
+      <w>60</w>
+      <h>300</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;290.0;10.0;10.0</additional_attributes>
+    <additional_attributes>40.0;280.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>290</x>
+      <x>300</x>
       <y>350</y>
       <w>100</w>
       <h>30</h>
@@ -217,7 +218,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>330</x>
+      <x>340</x>
       <y>370</y>
       <w>30</w>
       <h>110</h>
@@ -228,7 +229,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>750</x>
+      <x>760</x>
       <y>430</y>
       <w>100</w>
       <h>30</h>
@@ -239,7 +240,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>790</x>
+      <x>800</x>
       <y>450</y>
       <w>30</w>
       <h>110</h>
@@ -250,18 +251,18 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
-      <y>430</y>
+      <x>620</x>
+      <y>440</y>
       <w>160</w>
-      <h>130</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>140.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>140.0;10.0;10.0;100.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>720</x>
+      <x>730</x>
       <y>650</y>
       <w>140</w>
       <h>100</h>
@@ -274,7 +275,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>760</x>
+      <x>770</x>
       <y>560</y>
       <w>30</w>
       <h>110</h>
@@ -285,21 +286,21 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>670</x>
-      <y>350</y>
-      <w>80</w>
-      <h>320</h>
+      <x>660</x>
+      <y>360</y>
+      <w>100</w>
+      <h>310</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>60.0;300.0;10.0;10.0</additional_attributes>
+    <additional_attributes>80.0;290.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>330</x>
+      <x>340</x>
       <y>610</y>
       <w>140</w>
-      <h>50</h>
+      <h>30</h>
     </coordinates>
     <panel_attributes>*MealsModel*</panel_attributes>
     <additional_attributes/>
@@ -307,7 +308,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>390</x>
+      <x>400</x>
       <y>540</y>
       <w>30</w>
       <h>90</h>
@@ -318,19 +319,19 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>350</y>
-      <w>170</w>
-      <h>280</h>
+      <x>450</x>
+      <y>360</y>
+      <w>130</w>
+      <h>270</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;260.0;150.0;10.0</additional_attributes>
+    <additional_attributes>10.0;250.0;110.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>360</x>
-      <y>710</y>
+      <x>370</x>
+      <y>700</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -340,18 +341,18 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>400</x>
-      <y>650</y>
+      <x>410</x>
+      <y>630</y>
       <w>30</w>
-      <h>80</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>750</x>
+      <x>800</x>
       <y>100</y>
       <w>300</w>
       <h>80</h>
@@ -359,27 +360,27 @@
     <panel_attributes>Each QAction 'triggered' signal is connected
 from here, in setupActions(). SheetWindow
 also handles other connections, e.g. wiring
-up the mealNameChanged signal from MealToolBar
-to the handleUpdate slot in TotalsModel.
+up the mealNameChanged() signal from MealToolBar
+to the update() slot in TotalsModel.
 bg=light_gray</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>720</x>
+      <x>760</x>
       <y>170</y>
-      <w>70</w>
-      <h>140</h>
+      <w>80</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>lt=..</panel_attributes>
-    <additional_attributes>10.0;120.0;50.0;10.0</additional_attributes>
+    <additional_attributes>10.0;130.0;60.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
       <x>190</x>
-      <y>740</y>
+      <y>720</y>
       <w>140</w>
       <h>40</h>
     </coordinates>
@@ -392,17 +393,17 @@ bg=light_gray</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>280</x>
-      <y>650</y>
-      <w>100</w>
+      <y>630</y>
+      <w>110</w>
       <h>110</h>
     </coordinates>
     <panel_attributes>lt=..</panel_attributes>
-    <additional_attributes>10.0;90.0;80.0;10.0</additional_attributes>
+    <additional_attributes>10.0;90.0;90.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>310</x>
+      <x>320</x>
       <y>160</y>
       <w>120</w>
       <h>30</h>

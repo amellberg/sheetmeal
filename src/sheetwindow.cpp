@@ -65,6 +65,7 @@ void SheetWindow::setupActions()
     ui->newMealAction->setIcon(QIcon::fromTheme("document-new"));
     ui->newMealAction->setStatusTip(tr("Add a new meal to the sheet"));
     ui->newMealAction->setShortcut(QKeySequence::fromString("ctrl+shift+n"));
+    connect(ui->newMealAction, &QAction::triggered, mealToolBar, &MealToolBar::)
 
     ui->duplicateAction->setIcon(QIcon::fromTheme("edit-copy"));
     ui->duplicateAction->setStatusTip(tr("Duplicate the current meal"));
