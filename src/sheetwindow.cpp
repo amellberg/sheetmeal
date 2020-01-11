@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QSqlDatabase>
+#include <QSqlQuery>
 #include <QTemporaryFile>
 #include <QToolBar>
 #include <QUuid>
@@ -11,142 +12,195 @@
 #include "ui_sheetwindow.h"
 
 SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::SheetWindow)
+    : QMainWindow(parent), m_ui(new Ui::SheetWindow)
 {
-    // if default sheet is set, update sheetPath
+    // using QSettings: if default sheet is set, update m_sheetPath here
 
-    if (!createSheetConnection(sheetPath))
+    if (sheetPath.isEmpty()) {
+        if (!createTemporarySheetPath()) {
+            delete m_ui;
+            return;
+        }
+    }
+
+    if (!createDatabaseConnection()) {
+        delete m_ui;
         return;
+    }
 
-    ui->setupUi(this);
+    if (sheetPath.isEmpty()) {
+        initializeSheet();
+    }
+
+    m_ui->setupUi(this);
     setupActions();
     createToolBars();
 }
 
 SheetWindow::~SheetWindow()
 {
-    delete ui;
+    {
+        auto db = QSqlDatabase::database(m_connectionName);
+        if (db.isOpen()) {
+            db.close();
+        }
+    }
+    QSqlDatabase::removeDatabase(m_connectionName);
+
+    delete m_ui;
 }
 
-bool SheetWindow::createSheetConnection(QString sheetPath)
+bool SheetWindow::createTemporarySheetPath()
 {
-    if (sheetPath.isEmpty()) {
-        // Generate a temporary filename for the sheet in system tmp dir
-        QTemporaryFile tmpFile(QDir::tempPath() + "/sheet");
-        if (!tmpFile.open()) {
-            QMessageBox::critical(
-                        nullptr, tr("Cannot initialize sheet"),
-                        tr("Unable to create a temporary sheet.\n"
-                           "Error writing to system's temporary directory."),
-                        QMessageBox::Close);
-            return false;
-        }
-        sheetPath = tmpFile.fileName();
+    // Generate a path for the sheet in system tmp dir
+    QTemporaryFile tmpFile(QDir::tempPath() + "/sheet");
+    if (!tmpFile.open()) {
+        QMessageBox::critical(
+                    nullptr, tr("Cannot initialize sheet"),
+                    tr("Unable to create a new sheet.\n"
+                       "Error writing to system's temporary directory."),
+                    QMessageBox::Close);
+        return false;
     }
-    QString connName = QUuid::createUuid().toString();
-//    qDebug() << QString("sheetPath = %1").arg(sheetPath);
-//    qDebug() << QString(" connName = %1").arg(connName);
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connName);
-    db.setDatabaseName(sheetPath);
+    m_sheetPath = tmpFile.fileName();
+}
+
+bool SheetWindow::createDatabaseConnection()
+{
+    m_connectionName = QUuid::createUuid().toString();
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
+    db.setDatabaseName(m_sheetPath);
     if (!db.open()) {
         QMessageBox::critical(
                     nullptr, tr("Cannot initialize sheet"),
-                    tr("Unable to establish a database connection"),
+                    tr("Unable to establish a database connection."),
                     QMessageBox::Close);
         return false;
     }
     return true;
 }
 
+void SheetWindow::initializeSheet()
+{
+    QSqlQuery query(QSqlDatabase::database(m_connectionName));
+
+    // Table 'sheet' stores extra data; can only contain one row
+    query.exec("CREATE TABLE sheet ("
+               "id INTEGER PRIMARY KEY CHECK (id = 1), "
+               "name TEXT NOT NULL, "
+               "created TEXT NOT NULL, "
+               "modified TEXT NOT NULL)");
+
+    query.exec("CREATE TABLE fooditems ("
+               "id INTEGER PRIMARY KEY, "
+               "name TEXT NOT NULL, "
+               "carbs REAL NOT NULL, "
+               "fat REAL NOT NULL, "
+               "protein REAL NOT NULL, "
+               "kcal REAL NOT NULL)");
+
+    query.exec("CREATE TABLE meals ("
+               "id INTEGER PRIMARY KEY, "
+               "name TEXT NOT NULL)");
+
+    query.exec("CREATE TABLE mealcontents ("
+               "id INTEGER PRIMARY KEY, "
+               "mealid TEXT NOT NULL, "
+               "foodid TEXT NOT NULL, "
+               "weight INTEGER NOT NULL, "
+               "FOREIGN KEY (mealid) REFERENCES meals (id), "
+               "FOREIGN KEY (foodid) REFERENCES food (id))");
+}
+
 void SheetWindow::setupActions()
 {
     // --- Sheet actions ---
 
-    ui->newSheetAction->setIcon(QIcon::fromTheme("window-new"));
-    ui->newSheetAction->setStatusTip(tr("Create a blank sheet in a new window"));
-    ui->newSheetAction->setShortcut(QKeySequence::New);
+    m_ui->newSheetAction->setIcon(QIcon::fromTheme("window-new"));
+    m_ui->newSheetAction->setStatusTip(tr("Create a blank sheet in a new window"));
+    m_ui->newSheetAction->setShortcut(QKeySequence::New);
     //connect.....
 
-    ui->openAction->setIcon(QIcon::fromTheme("document-open"));
-    ui->openAction->setStatusTip(tr("Open a sheet in current window"));
-    ui->openAction->setShortcut(QKeySequence::Open);
+    m_ui->openAction->setIcon(QIcon::fromTheme("document-open"));
+    m_ui->openAction->setStatusTip(tr("Open a sheet in current window"));
+    m_ui->openAction->setShortcut(QKeySequence::Open);
     //connect.....
 
     // TODO: recent files actions
 
-    ui->saveAsAction->setIcon(QIcon::fromTheme("document-save-as"));
-    ui->saveAsAction->setStatusTip(tr("Save the sheet as a new file"));
-    ui->saveAsAction->setShortcut(QKeySequence::SaveAs);
+    m_ui->saveAsAction->setIcon(QIcon::fromTheme("document-save-as"));
+    m_ui->saveAsAction->setStatusTip(tr("Save the sheet as a new file"));
+    m_ui->saveAsAction->setShortcut(QKeySequence::SaveAs);
     //connect.....
 
-    ui->setFoodBankAction->setStatusTip(tr("Specify which food bank file to use"));
+    m_ui->setFoodBankAction->setStatusTip(tr("Specify which food bank file to use"));
 
-    ui->clearSheetAction->setIcon(QIcon::fromTheme("edit-clear"));
-    ui->clearSheetAction->setStatusTip(tr("Remove all meals from the sheet"));
+    m_ui->clearSheetAction->setIcon(QIcon::fromTheme("edit-clear"));
+    m_ui->clearSheetAction->setStatusTip(tr("Remove all meals from the sheet"));
     //connect.....
 
-    ui->refreshAction->setIcon(QIcon::fromTheme("view-refresh"));
-    ui->refreshAction->setStatusTip(tr("Reload sheet from disk"));
-    ui->refreshAction->setShortcut(QKeySequence::Refresh);
+    m_ui->refreshAction->setIcon(QIcon::fromTheme("view-refresh"));
+    m_ui->refreshAction->setStatusTip(tr("Reload sheet from disk"));
+    m_ui->refreshAction->setShortcut(QKeySequence::Refresh);
     //connect.....
 
-    ui->closeAction->setIcon(QIcon::fromTheme("window-close"));
-    ui->closeAction->setStatusTip(tr("Close this sheet"));
-    ui->closeAction->setShortcut(QKeySequence::Close);
+    m_ui->closeAction->setIcon(QIcon::fromTheme("window-close"));
+    m_ui->closeAction->setStatusTip(tr("Close this sheet"));
+    m_ui->closeAction->setShortcut(QKeySequence::Close);
     //connect.....
 
-    ui->quitAction->setIcon(QIcon::fromTheme("application-exit"));
-    ui->quitAction->setStatusTip(tr("Close all sheets and exit"));
-    ui->quitAction->setShortcut(QKeySequence::Quit);
+    m_ui->quitAction->setIcon(QIcon::fromTheme("application-exit"));
+    m_ui->quitAction->setStatusTip(tr("Close all sheets and exit"));
+    m_ui->quitAction->setShortcut(QKeySequence::Quit);
     //connect.....
 
 
     // --- Meal actions ---
 
-    ui->newMealAction->setIcon(QIcon::fromTheme("document-new"));
-    ui->newMealAction->setStatusTip(tr("Add a new meal to the sheet"));
-    ui->newMealAction->setShortcut(QKeySequence::fromString("ctrl+shift+n"));
+    m_ui->newMealAction->setIcon(QIcon::fromTheme("document-new"));
+    m_ui->newMealAction->setStatusTip(tr("Add a new meal to the sheet"));
+    m_ui->newMealAction->setShortcut(QKeySequence::fromString("ctrl+shift+n"));
     //connect(ui->newMealAction, &QAction::triggered, mealToolBar, &MealToolBar::)
 
-    ui->duplicateAction->setIcon(QIcon::fromTheme("edit-copy"));
-    ui->duplicateAction->setStatusTip(tr("Duplicate the current meal"));
+    m_ui->duplicateAction->setIcon(QIcon::fromTheme("edit-copy"));
+    m_ui->duplicateAction->setStatusTip(tr("Duplicate the current meal"));
 
-    ui->deleteAction->setIcon(QIcon::fromTheme("edit-delete"));
-    ui->deleteAction->setStatusTip(tr("Remove selected meal from the sheet"));
+    m_ui->deleteAction->setIcon(QIcon::fromTheme("edit-delete"));
+    m_ui->deleteAction->setStatusTip(tr("Remove selected meal from the sheet"));
 //    ui->deleteAction->setEnabled(false);
 
-    ui->clearMealAction->setIcon(QIcon::fromTheme("edit-clear"));
-    ui->clearMealAction->setStatusTip(tr("Remove all food items from the meal"));
+    m_ui->clearMealAction->setIcon(QIcon::fromTheme("edit-clear"));
+    m_ui->clearMealAction->setStatusTip(tr("Remove all food items from the meal"));
 
-    ui->addFoodAction->setIcon(QIcon::fromTheme("list-add"));
-    ui->addFoodAction->setStatusTip(tr("Add food items to the selected meal"));
-    ui->addFoodAction->setShortcut(QKeySequence::fromString("insert"));
+    m_ui->addFoodAction->setIcon(QIcon::fromTheme("list-add"));
+    m_ui->addFoodAction->setStatusTip(tr("Add food items to the selected meal"));
+    m_ui->addFoodAction->setShortcut(QKeySequence::fromString("insert"));
 //    ui->addFoodAction->setEnabled(false);
 
-    ui->removeFoodAction->setIcon(QIcon::fromTheme("list-remove"));
-    ui->removeFoodAction->setStatusTip(tr("Remove selected food items from meal"));
-    ui->removeFoodAction->setShortcut(QKeySequence::fromString("delete"));
+    m_ui->removeFoodAction->setIcon(QIcon::fromTheme("list-remove"));
+    m_ui->removeFoodAction->setStatusTip(tr("Remove selected food items from meal"));
+    m_ui->removeFoodAction->setShortcut(QKeySequence::fromString("delete"));
 //    ui->removeFoodAction->setEnabled(false);
 }
 
 void SheetWindow::createToolBars()
 {
-    sheetToolBar = addToolBar(tr("&Sheet"));
-    sheetToolBar->addAction(ui->newSheetAction);
-    sheetToolBar->addAction(ui->openAction);
-    sheetToolBar->addAction(ui->refreshAction);
-//    sheetToolBar->setHidden(true);
+    m_sheetToolBar = addToolBar(tr("&Sheet"));
+    m_sheetToolBar->addAction(m_ui->newSheetAction);
+    m_sheetToolBar->addAction(m_ui->openAction);
+    m_sheetToolBar->addAction(m_ui->refreshAction);
+//    m_sheetToolBar->setHidden(true);
 
-    mealToolBar = addToolBar(tr("&Meal"));
-    mealComboBox = new QComboBox;
-    mealComboBox->setMinimumWidth(125);
+    m_mealToolBar = addToolBar(tr("&Meal"));
+    m_mealComboBox = new QComboBox;
+    m_mealComboBox->setMinimumWidth(125);
 //    mealComboBox->setEnabled(false);
-    mealComboBox->addItem("Breakfast");
-    mealComboBox->addItem("Lunch");
-    mealToolBar->addWidget(mealComboBox);
-    mealToolBar->addAction(ui->newMealAction);
-    mealToolBar->addAction(ui->deleteAction);
-    mealToolBar->addAction(ui->addFoodAction);
-    mealToolBar->addAction(ui->removeFoodAction);
+    m_mealComboBox->addItem("Breakfast");
+    m_mealComboBox->addItem("Lunch");
+    m_mealToolBar->addWidget(m_mealComboBox);
+    m_mealToolBar->addAction(m_ui->newMealAction);
+    m_mealToolBar->addAction(m_ui->deleteAction);
+    m_mealToolBar->addAction(m_ui->addFoodAction);
+    m_mealToolBar->addAction(m_ui->removeFoodAction);
 }
 

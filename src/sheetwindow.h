@@ -18,14 +18,20 @@ public:
     ~SheetWindow();
 
 private:
-    bool createSheetConnection(QString sheetPath);
+    bool createTemporarySheetPath();
+    bool createDatabaseConnection();
+    void initializeSheet();
+
     void setupActions();
     void createToolBars();
 
-    Ui::SheetWindow *ui;
-    QToolBar *sheetToolBar;
-    QToolBar *mealToolBar;
-    QComboBox *mealComboBox;
+    Ui::SheetWindow *m_ui;
+    QToolBar *m_sheetToolBar;
+    QToolBar *m_mealToolBar;
+    QComboBox *m_mealComboBox;
+
+    QString m_connectionName;  // DB conn. name, unique to each running sheet
+    QString m_sheetPath;
 };
 
 #endif // SHEETWINDOW_H
