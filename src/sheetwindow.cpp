@@ -8,11 +8,12 @@
 #include <QToolBar>
 #include <QUuid>
 
+#include "mealtoolbar.h"
 #include "sheetwindow.h"
 #include "ui_sheetwindow.h"
 
 SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
-    : QMainWindow(parent), m_ui(new Ui::SheetWindow)
+    : QMainWindow(parent), m_ui(new Ui::SheetWindow), m_sheetPath(sheetPath)
 {
     // using QSettings: if default sheet is set, update m_sheetPath here
 
@@ -63,6 +64,7 @@ bool SheetWindow::createTemporarySheetPath()
         return false;
     }
     m_sheetPath = tmpFile.fileName();
+    return true;
 }
 
 bool SheetWindow::createDatabaseConnection()
@@ -84,11 +86,11 @@ void SheetWindow::initializeSheet()
 {
     QSqlQuery query(QSqlDatabase::database(m_connectionName));
 
-    // Table 'sheet' stores extra data; can only contain one row
+    // Table 'sheet' stores some extra data; can contain at most one row
     query.exec("CREATE TABLE sheet ("
                "id INTEGER PRIMARY KEY CHECK (id = 1), "
                "name TEXT NOT NULL, "
-               "created TEXT NOT NULL, "
+               "created TEXT NOT NULL, " // Date format: SQLite's SELECT date("now", "localtime")
                "modified TEXT NOT NULL)");
 
     query.exec("CREATE TABLE fooditems ("
@@ -191,13 +193,8 @@ void SheetWindow::createToolBars()
     m_sheetToolBar->addAction(m_ui->refreshAction);
 //    m_sheetToolBar->setHidden(true);
 
-    m_mealToolBar = addToolBar(tr("&Meal"));
-    m_mealComboBox = new QComboBox;
-    m_mealComboBox->setMinimumWidth(125);
-//    mealComboBox->setEnabled(false);
-    m_mealComboBox->addItem("Breakfast");
-    m_mealComboBox->addItem("Lunch");
-    m_mealToolBar->addWidget(m_mealComboBox);
+    m_mealToolBar = new MealToolBar(this);
+    addToolBar(m_mealToolBar);
     m_mealToolBar->addAction(m_ui->newMealAction);
     m_mealToolBar->addAction(m_ui->deleteAction);
     m_mealToolBar->addAction(m_ui->addFoodAction);

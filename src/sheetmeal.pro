@@ -20,11 +20,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mealtable.cpp \
+    mealtoolbar.cpp \
     sheetwindow.cpp \
     totalstable.cpp
 
 HEADERS += \
     mealtable.h \
+    mealtoolbar.h \
     sheetwindow.h \
     totalstable.h
 

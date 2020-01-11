@@ -7,7 +7,7 @@ namespace Ui {
     class SheetWindow;
 }
 
-class QComboBox;
+class MealToolBar;
 
 class SheetWindow : public QMainWindow
 {
@@ -27,8 +27,7 @@ private:
 
     Ui::SheetWindow *m_ui;
     QToolBar *m_sheetToolBar;
-    QToolBar *m_mealToolBar;
-    QComboBox *m_mealComboBox;
+    MealToolBar *m_mealToolBar;
 
     QString m_connectionName;  // DB conn. name, unique to each running sheet
     QString m_sheetPath;

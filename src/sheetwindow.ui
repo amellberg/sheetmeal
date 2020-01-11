@@ -32,7 +32,7 @@
      <x>0</x>
      <y>0</y>
      <width>515</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="sheetMenu">
@@ -53,7 +53,6 @@
     <addaction name="separator"/>
     <addaction name="saveAsAction"/>
     <addaction name="separator"/>
-    <addaction name="setFoodBankAction"/>
     <addaction name="clearSheetAction"/>
     <addaction name="refreshAction"/>
     <addaction name="closeAction"/>
