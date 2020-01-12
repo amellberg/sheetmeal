@@ -8,9 +8,11 @@
 #include <QToolBar>
 #include <QUuid>
 
+#include "mealsmodel.h"
 #include "mealtoolbar.h"
 #include "sheetwindow.h"
 #include "ui_sheetwindow.h"
+
 
 SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     : QMainWindow(parent), m_ui(new Ui::SheetWindow), m_sheetPath(sheetPath)
@@ -34,8 +36,9 @@ SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     }
 
     m_ui->setupUi(this);
-    setupActions();
+    createModels();
     createToolBars();
+    setupActions();
 }
 
 SheetWindow::~SheetWindow()
@@ -162,7 +165,8 @@ void SheetWindow::setupActions()
     m_ui->newMealAction->setIcon(QIcon::fromTheme("document-new"));
     m_ui->newMealAction->setStatusTip(tr("Add a new meal to the sheet"));
     m_ui->newMealAction->setShortcut(QKeySequence::fromString("ctrl+shift+n"));
-    //connect(ui->newMealAction, &QAction::triggered, mealToolBar, &MealToolBar::)
+    connect(m_ui->newMealAction, SIGNAL(triggered()), m_mealsModel, SLOT(onNewMeal()));
+    connect(m_ui->newMealAction, SIGNAL(triggered()), m_mealToolBar, SLOT(onNewMeal()));
 
     m_ui->duplicateAction->setIcon(QIcon::fromTheme("edit-copy"));
     m_ui->duplicateAction->setStatusTip(tr("Duplicate the current meal"));
@@ -193,11 +197,16 @@ void SheetWindow::createToolBars()
     m_sheetToolBar->addAction(m_ui->refreshAction);
 //    m_sheetToolBar->setHidden(true);
 
-    m_mealToolBar = new MealToolBar(this);
+    m_mealToolBar = new MealToolBar(m_mealsModel, this);
     addToolBar(m_mealToolBar);
     m_mealToolBar->addAction(m_ui->newMealAction);
     m_mealToolBar->addAction(m_ui->deleteAction);
     m_mealToolBar->addAction(m_ui->addFoodAction);
     m_mealToolBar->addAction(m_ui->removeFoodAction);
+}
+
+void SheetWindow::createModels()
+{
+    m_mealsModel = new MealsModel(QSqlDatabase::database(m_connectionName), this);
 }
 

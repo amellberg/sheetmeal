@@ -3,13 +3,17 @@
 
 #include <QToolBar>
 
+class QAbstractItemModel;
 class QComboBox;
 
 class MealToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    MealToolBar(QWidget *parent = nullptr);
+    MealToolBar(QAbstractItemModel *mealsModel, QWidget *parent = nullptr);
+
+public slots:
+    void onNewMeal();
 
 private:
     QComboBox *m_mealComboBox;
