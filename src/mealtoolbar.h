@@ -14,6 +14,10 @@ public:
 
 public slots:
     void onNewMeal();
+    void onMealNameChanged();
+
+signals:
+    void mealNameChanged(int row, const QString &mealName);
 
 private:
     QComboBox *m_mealComboBox;

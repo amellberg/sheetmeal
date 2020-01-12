@@ -11,6 +11,7 @@ public:
 
 public slots:
     void onNewMeal();
+    void onMealNameChanged(int row, const QString &mealName);
 };
 
 #endif // MEALSMODEL_H

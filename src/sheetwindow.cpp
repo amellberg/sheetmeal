@@ -39,6 +39,9 @@ SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     createModels();
     createToolBars();
     setupActions();
+
+    connect(m_mealToolBar, &MealToolBar::mealNameChanged,
+            m_mealsModel, &MealsModel::onMealNameChanged);
 }
 
 SheetWindow::~SheetWindow()
