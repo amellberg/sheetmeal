@@ -19,6 +19,13 @@ public:
     SheetWindow(QString sheetPath = QString(""), QWidget *parent = nullptr);
     ~SheetWindow();
 
+private slots:
+    void onNewMeal();
+    void onRenameMeal();
+
+signals:
+    void mealNameChanged(int row, const QString &newMealName);
+
 private:
     bool createTemporarySheetPath();
     bool createDatabaseConnection();

@@ -3,6 +3,10 @@
 
 #include <QSqlTableModel>
 
+/**
+ * @brief Supplies data for the QComboBox showing meals in the main
+ * window. Connected to table 'meals' in the sheet db.
+ */
 class MealsModel : public QSqlTableModel
 {
     Q_OBJECT
@@ -11,7 +15,7 @@ public:
 
 public slots:
     void onNewMeal();
-    void onMealNameChanged(int row, const QString &mealName);
+    void onMealNameChanged(int row, const QString &newMealName);
 };
 
 #endif // MEALSMODEL_H

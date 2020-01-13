@@ -1,6 +1,7 @@
+#include <QApplication>
+
 #include "sheetwindow.h"
 
-#include <QApplication>
 
 int main(int argc, char *argv[])
 {

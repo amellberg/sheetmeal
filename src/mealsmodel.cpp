@@ -20,14 +20,11 @@ void MealsModel::onNewMeal()
     submitAll();
 }
 
-void MealsModel::onMealNameChanged(int row, const QString &mealName)
+void MealsModel::onMealNameChanged(int row, const QString &newMealName)
 {
-    QModelIndex idx = index(row, 1);
+    QModelIndex idx = index(row, fieldIndex("name"));
     QSqlRecord rec = record(idx.row());
-//    qDebug() << rec;
-    rec.setValue("name", mealName);
+    rec.setValue("name", newMealName);
     setRecord(idx.row(), rec);
-//    qDebug() << ret;
     submitAll();
-//    select();
 }

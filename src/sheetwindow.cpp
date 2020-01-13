@@ -14,6 +14,12 @@
 #include "ui_sheetwindow.h"
 
 
+// Ugly workaround for the meals model resetting the combo box selection.
+// We write to this variable before renaming a meal, and read from it
+// after the model has updated and reset the view.
+static int tempMealIndex;
+
+
 SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     : QMainWindow(parent), m_ui(new Ui::SheetWindow), m_sheetPath(sheetPath)
 {
@@ -55,6 +61,33 @@ SheetWindow::~SheetWindow()
     QSqlDatabase::removeDatabase(m_connectionName);
 
     delete m_ui;
+}
+
+void SheetWindow::onNewMeal()
+{
+    int numMeals = m_mealsModel->rowCount();
+    if (numMeals == 1) {
+        m_mealsComboBox->setEnabled(true);
+        m_ui->renameMealAction->setEnabled(true);
+        m_ui->deleteMealAction->setEnabled(true);
+        m_ui->addFoodAction->setEnabled(true);
+        m_ui->duplicateMealAction->setEnabled(true);
+    }
+    m_mealsComboBox->setCurrentIndex(numMeals - 1);
+}
+
+void SheetWindow::onRenameMeal()
+{
+    QString currentMealName = m_mealsComboBox->currentText();
+    bool mealRenameOk;
+    QString newMealName = QInputDialog::getText(
+                this, tr("Rename Meal"), tr("Meal name:"),
+                QLineEdit::Normal, currentMealName, &mealRenameOk);
+
+    if (mealRenameOk && newMealName != currentMealName) {
+        tempMealIndex = m_mealsComboBox->currentIndex();
+        emit mealNameChanged(m_mealsComboBox->currentIndex(), newMealName);
+    }
 }
 
 bool SheetWindow::createTemporarySheetPath()
@@ -166,18 +199,16 @@ void SheetWindow::setupActions()
     m_ui->newMealAction->setIcon(QIcon::fromTheme("document-new"));
     m_ui->newMealAction->setStatusTip(m_ui->newMealAction->toolTip());
     m_ui->newMealAction->setShortcut(QKeySequence::fromString("ctrl+shift+n"));
-    connect(m_ui->newMealAction, SIGNAL(triggered()), m_mealsModel, SLOT(onNewMeal()));
-//    connect(m_ui->newMealAction, SIGNAL(triggered()), m_mealToolBar, SLOT(onNewMeal()));
+    connect(m_ui->newMealAction, &QAction::triggered, m_mealsModel, &MealsModel::onNewMeal);
+    connect(m_ui->newMealAction, &QAction::triggered, this, &SheetWindow::onNewMeal);
 
     m_ui->duplicateMealAction->setIcon(QIcon::fromTheme("edit-copy"));
     m_ui->duplicateMealAction->setStatusTip(m_ui->duplicateMealAction->toolTip());
 
     m_ui->renameMealAction->setIcon(QIcon::fromTheme("accessories-text-editor"));
     m_ui->renameMealAction->setStatusTip(m_ui->renameMealAction->toolTip());
-//    connect(m_ui->renameMealAction, &QAction::triggered, [=]() {
-//        QInputDialog::getText(this, tr("Rename Meal"), tr("Meal name:"),
-//                              QLineEdit::Normal, m_mealToolBar->currentMealName());
-//    });
+    connect(m_ui->renameMealAction, &QAction::triggered, this, &SheetWindow::onRenameMeal);
+    connect(this, &SheetWindow::mealNameChanged, m_mealsModel, &MealsModel::onMealNameChanged);
 
     m_ui->deleteMealAction->setIcon(QIcon::fromTheme("edit-delete"));
     m_ui->deleteMealAction->setStatusTip(m_ui->deleteMealAction->toolTip());
@@ -197,8 +228,8 @@ void SheetWindow::setupActions()
 //    ui->removeFoodAction->setEnabled(false);
 }
 
-// There is some inconsistency in not defining the toolbars through the UI-file
-// like the rest of the widgets, but I won't bother with changing that.
+// Note to self: there is some inconsistency in not defining the toolbars
+// through the UI-file like the rest of the widgets.
 void SheetWindow::createToolBars()
 {
     m_sheetToolBar = addToolBar(tr("&Sheet"));
@@ -226,5 +257,7 @@ void SheetWindow::createToolBars()
 void SheetWindow::createModels()
 {
     m_mealsModel = new MealsModel(QSqlDatabase::database(m_connectionName), this);
+    connect(m_mealsModel, &QAbstractItemModel::modelReset, this, [this]() {
+       m_mealsComboBox->setCurrentIndex(tempMealIndex);
+    });
 }
-
