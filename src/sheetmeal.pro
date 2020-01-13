@@ -21,14 +21,12 @@ SOURCES += \
     main.cpp \
     mealsmodel.cpp \
     mealtable.cpp \
-    mealtoolbar.cpp \
     sheetwindow.cpp \
     totalstable.cpp
 
 HEADERS += \
     mealsmodel.h \
     mealtable.h \
-    mealtoolbar.h \
     sheetwindow.h \
     totalstable.h
 

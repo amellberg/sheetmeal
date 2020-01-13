@@ -1,6 +1,7 @@
 #include <QComboBox>
 #include <QDebug>
 #include <QDir>
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -9,7 +10,6 @@
 #include <QUuid>
 
 #include "mealsmodel.h"
-#include "mealtoolbar.h"
 #include "sheetwindow.h"
 #include "ui_sheetwindow.h"
 
@@ -40,8 +40,8 @@ SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     createToolBars();
     setupActions();
 
-    connect(m_mealToolBar, &MealToolBar::mealNameChanged,
-            m_mealsModel, &MealsModel::onMealNameChanged);
+//    connect(m_mealToolBar, &MealToolBar::mealNameChanged,
+//            m_mealsModel, &MealsModel::onMealNameChanged);
 }
 
 SheetWindow::~SheetWindow()
@@ -169,10 +169,17 @@ void SheetWindow::setupActions()
     m_ui->newMealAction->setStatusTip(tr("Add a new meal to the sheet"));
     m_ui->newMealAction->setShortcut(QKeySequence::fromString("ctrl+shift+n"));
     connect(m_ui->newMealAction, SIGNAL(triggered()), m_mealsModel, SLOT(onNewMeal()));
-    connect(m_ui->newMealAction, SIGNAL(triggered()), m_mealToolBar, SLOT(onNewMeal()));
+//    connect(m_ui->newMealAction, SIGNAL(triggered()), m_mealToolBar, SLOT(onNewMeal()));
 
     m_ui->duplicateAction->setIcon(QIcon::fromTheme("edit-copy"));
     m_ui->duplicateAction->setStatusTip(tr("Duplicate the current meal"));
+
+    m_ui->renameMealAction->setIcon(QIcon::fromTheme("accessories-text-editor"));
+    m_ui->renameMealAction->setStatusTip(tr("Rename selected meal"));
+//    connect(m_ui->renameMealAction, &QAction::triggered, [=]() {
+//        QInputDialog::getText(this, tr("Rename Meal"), tr("Meal name:"),
+//                              QLineEdit::Normal, m_mealToolBar->currentMealName());
+//    });
 
     m_ui->deleteAction->setIcon(QIcon::fromTheme("edit-delete"));
     m_ui->deleteAction->setStatusTip(tr("Remove selected meal from the sheet"));
@@ -200,12 +207,20 @@ void SheetWindow::createToolBars()
     m_sheetToolBar->addAction(m_ui->refreshAction);
 //    m_sheetToolBar->setHidden(true);
 
-    m_mealToolBar = new MealToolBar(m_mealsModel, this);
-    addToolBar(m_mealToolBar);
-    m_mealToolBar->addAction(m_ui->newMealAction);
-    m_mealToolBar->addAction(m_ui->deleteAction);
-    m_mealToolBar->addAction(m_ui->addFoodAction);
-    m_mealToolBar->addAction(m_ui->removeFoodAction);
+    m_mealsComboBox = new QComboBox;
+    m_mealsComboBox->setModel(m_mealsModel);
+    m_mealsComboBox->setModelColumn(1);  // Display 'name' column
+    m_mealsComboBox->setMinimumWidth(125);
+    m_mealsComboBox->setInsertPolicy(QComboBox::NoInsert);
+    m_mealsComboBox->setEnabled(false);
+
+    m_mealsToolBar = addToolBar(tr("&Meal"));
+    m_mealsToolBar->addWidget(m_mealsComboBox);
+    m_mealsToolBar->addAction(m_ui->newMealAction);
+    m_mealsToolBar->addAction(m_ui->deleteAction);
+    m_mealsToolBar->addAction(m_ui->renameMealAction);
+    m_mealsToolBar->addAction(m_ui->addFoodAction);
+    m_mealsToolBar->addAction(m_ui->removeFoodAction);
 }
 
 void SheetWindow::createModels()

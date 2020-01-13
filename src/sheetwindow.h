@@ -7,6 +7,7 @@ namespace Ui {
     class SheetWindow;
 }
 
+class QComboBox;
 class MealsModel;
 class MealToolBar;
 
@@ -29,7 +30,8 @@ private:
 
     Ui::SheetWindow *m_ui;
     QToolBar *m_sheetToolBar;
-    MealToolBar *m_mealToolBar;
+    QToolBar *m_mealsToolBar;
+    QComboBox *m_mealsComboBox;
 
     MealsModel *m_mealsModel;
 

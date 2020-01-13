@@ -66,6 +66,7 @@
     <addaction name="newMealAction"/>
     <addaction name="duplicateAction"/>
     <addaction name="separator"/>
+    <addaction name="renameMealAction"/>
     <addaction name="clearMealAction"/>
     <addaction name="deleteAction"/>
     <addaction name="separator"/>
@@ -206,6 +207,11 @@
   <action name="setFoodBankAction">
    <property name="text">
     <string>Set &amp;Food Bank...</string>
+   </property>
+  </action>
+  <action name="renameMealAction">
+   <property name="text">
+    <string>R&amp;ename...</string>
    </property>
   </action>
  </widget>

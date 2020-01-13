@@ -9,6 +9,7 @@ MealsModel::MealsModel(QSqlDatabase db, QObject *parent)
     : QSqlTableModel(parent, db)
 {
     setTable("meals");
+    setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
 
 void MealsModel::onNewMeal()
@@ -16,17 +17,17 @@ void MealsModel::onNewMeal()
     QSqlRecord rec = record();
     rec.setValue("name", "Untitled");
     insertRecord(-1, rec);
-    select();
+    submitAll();
 }
 
 void MealsModel::onMealNameChanged(int row, const QString &mealName)
 {
-//    QModelIndex idx = index(row, 1);
-    QSqlRecord rec = record(row);
-    qDebug() << rec;
+    QModelIndex idx = index(row, 1);
+    QSqlRecord rec = record(idx.row());
+//    qDebug() << rec;
     rec.setValue("name", mealName);
-    bool ret = setRecord(row, rec);
-    qDebug() << ret;
-//    submitAll();
+    setRecord(idx.row(), rec);
+//    qDebug() << ret;
+    submitAll();
 //    select();
 }
