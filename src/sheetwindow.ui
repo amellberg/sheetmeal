@@ -54,8 +54,8 @@
     <addaction name="saveAsAction"/>
     <addaction name="separator"/>
     <addaction name="clearSheetAction"/>
-    <addaction name="refreshAction"/>
-    <addaction name="closeAction"/>
+    <addaction name="refreshSheetAction"/>
+    <addaction name="closeSheetAction"/>
     <addaction name="separator"/>
     <addaction name="quitAction"/>
    </widget>
@@ -64,11 +64,11 @@
      <string>&amp;Meal</string>
     </property>
     <addaction name="newMealAction"/>
-    <addaction name="duplicateAction"/>
+    <addaction name="duplicateMealAction"/>
     <addaction name="separator"/>
     <addaction name="renameMealAction"/>
     <addaction name="clearMealAction"/>
-    <addaction name="deleteAction"/>
+    <addaction name="deleteMealAction"/>
     <addaction name="separator"/>
     <addaction name="addFoodAction"/>
     <addaction name="removeFoodAction"/>
@@ -101,75 +101,117 @@
    <addaction name="optionsMenu"/>
    <addaction name="helpMenu"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="newSheetAction">
    <property name="text">
     <string>&amp;New</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a blank sheet in a new window</string>
    </property>
   </action>
   <action name="instructionsAction">
    <property name="text">
     <string>&amp;Instructions</string>
    </property>
+   <property name="toolTip">
+    <string>How to use the application</string>
+   </property>
   </action>
   <action name="aboutAction">
    <property name="text">
     <string>&amp;About</string>
+   </property>
+   <property name="toolTip">
+    <string>About SheetMeal</string>
    </property>
   </action>
   <action name="openAction">
    <property name="text">
     <string>&amp;Open...</string>
    </property>
+   <property name="toolTip">
+    <string>Open a sheet in current window</string>
+   </property>
   </action>
   <action name="saveAsAction">
    <property name="text">
     <string>&amp;Save As...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save sheet as new file</string>
    </property>
   </action>
   <action name="clearSheetAction">
    <property name="text">
     <string>&amp;Clear...</string>
    </property>
+   <property name="toolTip">
+    <string>Remove all meals from sheet</string>
+   </property>
   </action>
-  <action name="refreshAction">
+  <action name="refreshSheetAction">
    <property name="text">
     <string>R&amp;efresh</string>
    </property>
+   <property name="toolTip">
+    <string>Reload sheet from disk</string>
+   </property>
   </action>
-  <action name="closeAction">
+  <action name="closeSheetAction">
    <property name="text">
     <string>C&amp;lose</string>
+   </property>
+   <property name="toolTip">
+    <string>Close this sheet</string>
    </property>
   </action>
   <action name="quitAction">
    <property name="text">
     <string>&amp;Quit</string>
    </property>
+   <property name="toolTip">
+    <string>Close all sheets and exit</string>
+   </property>
   </action>
   <action name="newMealAction">
    <property name="text">
     <string>&amp;New</string>
    </property>
+   <property name="toolTip">
+    <string>Add new meal to sheet</string>
+   </property>
   </action>
-  <action name="duplicateAction">
+  <action name="duplicateMealAction">
    <property name="text">
     <string>D&amp;uplicate</string>
+   </property>
+   <property name="toolTip">
+    <string>Make a duplicate of meal</string>
    </property>
   </action>
   <action name="addFoodAction">
    <property name="text">
     <string>Add &amp;Food...</string>
    </property>
+   <property name="toolTip">
+    <string>Add food items to meal</string>
+   </property>
   </action>
   <action name="clearMealAction">
    <property name="text">
     <string>&amp;Clear...</string>
    </property>
+   <property name="toolTip">
+    <string>Remove all food items from meal</string>
+   </property>
   </action>
-  <action name="deleteAction">
+  <action name="deleteMealAction">
    <property name="text">
     <string>&amp;Delete...</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete meal</string>
    </property>
   </action>
   <action name="rememberSheetAction">
@@ -203,15 +245,16 @@
    <property name="text">
     <string>&amp;Remove Food</string>
    </property>
-  </action>
-  <action name="setFoodBankAction">
-   <property name="text">
-    <string>Set &amp;Food Bank...</string>
+   <property name="toolTip">
+    <string>Remove selected food items</string>
    </property>
   </action>
   <action name="renameMealAction">
    <property name="text">
-    <string>R&amp;ename...</string>
+    <string>R&amp;ename</string>
+   </property>
+   <property name="toolTip">
+    <string>Rename meal</string>
    </property>
   </action>
  </widget>

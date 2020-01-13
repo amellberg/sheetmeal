@@ -125,40 +125,38 @@ void SheetWindow::setupActions()
     // --- Sheet actions ---
 
     m_ui->newSheetAction->setIcon(QIcon::fromTheme("window-new"));
-    m_ui->newSheetAction->setStatusTip(tr("Create a blank sheet in a new window"));
+    m_ui->newSheetAction->setStatusTip(m_ui->newSheetAction->toolTip());
     m_ui->newSheetAction->setShortcut(QKeySequence::New);
     //connect.....
 
     m_ui->openAction->setIcon(QIcon::fromTheme("document-open"));
-    m_ui->openAction->setStatusTip(tr("Open a sheet in current window"));
+    m_ui->openAction->setStatusTip(m_ui->openAction->toolTip());
     m_ui->openAction->setShortcut(QKeySequence::Open);
     //connect.....
 
     // TODO: recent files actions
 
     m_ui->saveAsAction->setIcon(QIcon::fromTheme("document-save-as"));
-    m_ui->saveAsAction->setStatusTip(tr("Save the sheet as a new file"));
+    m_ui->saveAsAction->setStatusTip(m_ui->saveAsAction->toolTip());
     m_ui->saveAsAction->setShortcut(QKeySequence::SaveAs);
     //connect.....
 
-    m_ui->setFoodBankAction->setStatusTip(tr("Specify which food bank file to use"));
-
     m_ui->clearSheetAction->setIcon(QIcon::fromTheme("edit-clear"));
-    m_ui->clearSheetAction->setStatusTip(tr("Remove all meals from the sheet"));
+    m_ui->clearSheetAction->setStatusTip(m_ui->clearSheetAction->toolTip());
     //connect.....
 
-    m_ui->refreshAction->setIcon(QIcon::fromTheme("view-refresh"));
-    m_ui->refreshAction->setStatusTip(tr("Reload sheet from disk"));
-    m_ui->refreshAction->setShortcut(QKeySequence::Refresh);
+    m_ui->refreshSheetAction->setIcon(QIcon::fromTheme("view-refresh"));
+    m_ui->refreshSheetAction->setStatusTip(m_ui->refreshSheetAction->toolTip());
+    m_ui->refreshSheetAction->setShortcut(QKeySequence::Refresh);
     //connect.....
 
-    m_ui->closeAction->setIcon(QIcon::fromTheme("window-close"));
-    m_ui->closeAction->setStatusTip(tr("Close this sheet"));
-    m_ui->closeAction->setShortcut(QKeySequence::Close);
+    m_ui->closeSheetAction->setIcon(QIcon::fromTheme("window-close"));
+    m_ui->closeSheetAction->setStatusTip(m_ui->closeSheetAction->toolTip());
+    m_ui->closeSheetAction->setShortcut(QKeySequence::Close);
     //connect.....
 
     m_ui->quitAction->setIcon(QIcon::fromTheme("application-exit"));
-    m_ui->quitAction->setStatusTip(tr("Close all sheets and exit"));
+    m_ui->quitAction->setStatusTip(m_ui->quitAction->toolTip());
     m_ui->quitAction->setShortcut(QKeySequence::Quit);
     //connect.....
 
@@ -166,45 +164,47 @@ void SheetWindow::setupActions()
     // --- Meal actions ---
 
     m_ui->newMealAction->setIcon(QIcon::fromTheme("document-new"));
-    m_ui->newMealAction->setStatusTip(tr("Add a new meal to the sheet"));
+    m_ui->newMealAction->setStatusTip(m_ui->newMealAction->toolTip());
     m_ui->newMealAction->setShortcut(QKeySequence::fromString("ctrl+shift+n"));
     connect(m_ui->newMealAction, SIGNAL(triggered()), m_mealsModel, SLOT(onNewMeal()));
 //    connect(m_ui->newMealAction, SIGNAL(triggered()), m_mealToolBar, SLOT(onNewMeal()));
 
-    m_ui->duplicateAction->setIcon(QIcon::fromTheme("edit-copy"));
-    m_ui->duplicateAction->setStatusTip(tr("Duplicate the current meal"));
+    m_ui->duplicateMealAction->setIcon(QIcon::fromTheme("edit-copy"));
+    m_ui->duplicateMealAction->setStatusTip(m_ui->duplicateMealAction->toolTip());
 
     m_ui->renameMealAction->setIcon(QIcon::fromTheme("accessories-text-editor"));
-    m_ui->renameMealAction->setStatusTip(tr("Rename selected meal"));
+    m_ui->renameMealAction->setStatusTip(m_ui->renameMealAction->toolTip());
 //    connect(m_ui->renameMealAction, &QAction::triggered, [=]() {
 //        QInputDialog::getText(this, tr("Rename Meal"), tr("Meal name:"),
 //                              QLineEdit::Normal, m_mealToolBar->currentMealName());
 //    });
 
-    m_ui->deleteAction->setIcon(QIcon::fromTheme("edit-delete"));
-    m_ui->deleteAction->setStatusTip(tr("Remove selected meal from the sheet"));
+    m_ui->deleteMealAction->setIcon(QIcon::fromTheme("edit-delete"));
+    m_ui->deleteMealAction->setStatusTip(m_ui->deleteMealAction->toolTip());
 //    ui->deleteAction->setEnabled(false);
 
     m_ui->clearMealAction->setIcon(QIcon::fromTheme("edit-clear"));
-    m_ui->clearMealAction->setStatusTip(tr("Remove all food items from the meal"));
+    m_ui->clearMealAction->setStatusTip(m_ui->clearMealAction->toolTip());
 
     m_ui->addFoodAction->setIcon(QIcon::fromTheme("list-add"));
-    m_ui->addFoodAction->setStatusTip(tr("Add food items to the selected meal"));
+    m_ui->addFoodAction->setStatusTip(m_ui->addFoodAction->toolTip());
     m_ui->addFoodAction->setShortcut(QKeySequence::fromString("insert"));
 //    ui->addFoodAction->setEnabled(false);
 
     m_ui->removeFoodAction->setIcon(QIcon::fromTheme("list-remove"));
-    m_ui->removeFoodAction->setStatusTip(tr("Remove selected food items from meal"));
+    m_ui->removeFoodAction->setStatusTip(m_ui->removeFoodAction->toolTip());
     m_ui->removeFoodAction->setShortcut(QKeySequence::fromString("delete"));
 //    ui->removeFoodAction->setEnabled(false);
 }
 
+// There is some inconsistency in not defining the toolbars through the UI-file
+// like the rest of the widgets, but I won't bother with changing that.
 void SheetWindow::createToolBars()
 {
     m_sheetToolBar = addToolBar(tr("&Sheet"));
     m_sheetToolBar->addAction(m_ui->newSheetAction);
     m_sheetToolBar->addAction(m_ui->openAction);
-    m_sheetToolBar->addAction(m_ui->refreshAction);
+    m_sheetToolBar->addAction(m_ui->refreshSheetAction);
 //    m_sheetToolBar->setHidden(true);
 
     m_mealsComboBox = new QComboBox;
@@ -217,7 +217,7 @@ void SheetWindow::createToolBars()
     m_mealsToolBar = addToolBar(tr("&Meal"));
     m_mealsToolBar->addWidget(m_mealsComboBox);
     m_mealsToolBar->addAction(m_ui->newMealAction);
-    m_mealsToolBar->addAction(m_ui->deleteAction);
+    m_mealsToolBar->addAction(m_ui->deleteMealAction);
     m_mealsToolBar->addAction(m_ui->renameMealAction);
     m_mealsToolBar->addAction(m_ui->addFoodAction);
     m_mealsToolBar->addAction(m_ui->removeFoodAction);
