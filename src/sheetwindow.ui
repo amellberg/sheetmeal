@@ -183,9 +183,6 @@
    </property>
   </action>
   <action name="duplicateMealAction">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>D&amp;uplicate</string>
    </property>
@@ -194,9 +191,6 @@
    </property>
   </action>
   <action name="addFoodAction">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>Add &amp;Food...</string>
    </property>
@@ -205,9 +199,6 @@
    </property>
   </action>
   <action name="clearMealAction">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>&amp;Clear...</string>
    </property>
@@ -216,9 +207,6 @@
    </property>
   </action>
   <action name="deleteMealAction">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>&amp;Delete...</string>
    </property>
@@ -254,9 +242,6 @@
    </property>
   </action>
   <action name="removeFoodAction">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>&amp;Remove Food</string>
    </property>
@@ -265,9 +250,6 @@
    </property>
   </action>
   <action name="renameMealAction">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>R&amp;ename</string>
    </property>

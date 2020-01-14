@@ -14,6 +14,7 @@ public:
     MealsModel(QSqlDatabase db, QObject *parent = nullptr);
 
 public slots:
+    void onDeleteMeal(int row);
     void onNewMeal();
     void onMealNameChanged(int row, const QString &newMealName);
 };

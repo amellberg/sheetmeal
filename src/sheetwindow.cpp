@@ -18,7 +18,7 @@
 SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     : QMainWindow(parent),
       m_ui(new Ui::SheetWindow),
-      lastMealIndex(0),
+      storedMealIndex(0),
       restoreMealIndex(false),
       m_sheetPath(sheetPath)
 {
@@ -44,6 +44,8 @@ SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     createModels();
     createToolBars();
     setupActions();
+
+    sheetIsEmpty();
 }
 
 SheetWindow::~SheetWindow()
@@ -59,15 +61,26 @@ SheetWindow::~SheetWindow()
     delete m_ui;
 }
 
+void SheetWindow::onDeleteMeal()
+{
+    int numMeals = m_mealsComboBox->count();
+    if (numMeals == 1) {
+        sheetIsEmpty();
+    } else if (numMeals > 1) {
+        storedMealIndex = m_mealsComboBox->currentIndex();
+        if (storedMealIndex == numMeals - 1) {
+            storedMealIndex--;
+        }
+        restoreMealIndex = true;
+    }
+    emit mealDeleted(m_mealsComboBox->currentIndex());
+}
+
 void SheetWindow::onNewMeal()
 {
     int numMeals = m_mealsModel->rowCount();
     if (numMeals == 1) {
-        m_mealsComboBox->setEnabled(true);
-        m_ui->renameMealAction->setEnabled(true);
-        m_ui->deleteMealAction->setEnabled(true);
-        m_ui->addFoodAction->setEnabled(true);
-        m_ui->duplicateMealAction->setEnabled(true);
+        sheetIsNonEmpty();
     }
     m_mealsComboBox->setCurrentIndex(numMeals - 1);
 }
@@ -81,7 +94,7 @@ void SheetWindow::onRenameMeal()
                 QLineEdit::Normal, currentMealName, &okToProceed);
 
     if (okToProceed && newMealName != currentMealName) {
-        lastMealIndex = m_mealsComboBox->currentIndex();
+        storedMealIndex = m_mealsComboBox->currentIndex();
         restoreMealIndex = true;
         emit mealNameChanged(m_mealsComboBox->currentIndex(), newMealName);
     }
@@ -90,7 +103,7 @@ void SheetWindow::onRenameMeal()
 void SheetWindow::onMealModelReset()
 {
     if (restoreMealIndex) {
-        m_mealsComboBox->setCurrentIndex(lastMealIndex);
+        m_mealsComboBox->setCurrentIndex(storedMealIndex);
         restoreMealIndex = false;
     }
 }
@@ -158,8 +171,8 @@ void SheetWindow::initializeSheet()
                "FOREIGN KEY (mealid) REFERENCES meals (id) ON DELETE CASCADE, "
                "FOREIGN KEY (foodid) REFERENCES fooditems (id) ON DELETE CASCADE)");
 
-    // Some test data
     /*
+    // Some test data
     query.exec("INSERT INTO fooditems (name, carbs, fat, protein, kcal) "
                "VALUES ('Mellanmjölk', 34.2, 3.3, 11, 194.5)");
     query.exec("INSERT INTO fooditems (name, carbs, fat, protein, kcal) "
@@ -235,6 +248,8 @@ void SheetWindow::setupActions()
     m_ui->deleteMealAction->setIcon(QIcon::fromTheme("edit-delete"));
     m_ui->deleteMealAction->setStatusTip(m_ui->deleteMealAction->toolTip());
 //    ui->deleteAction->setEnabled(false);
+    connect(m_ui->deleteMealAction, &QAction::triggered, this, &SheetWindow::onDeleteMeal);
+    connect(this, &SheetWindow::mealDeleted, m_mealsModel, &MealsModel::onDeleteMeal);
 
     m_ui->clearMealAction->setIcon(QIcon::fromTheme("edit-clear"));
     m_ui->clearMealAction->setStatusTip(m_ui->clearMealAction->toolTip());
@@ -265,7 +280,7 @@ void SheetWindow::createToolBars()
     m_mealsComboBox->setModelColumn(1);  // Display 'name' column
     m_mealsComboBox->setMinimumWidth(125);
     m_mealsComboBox->setInsertPolicy(QComboBox::NoInsert);
-    m_mealsComboBox->setEnabled(false);
+//    m_mealsComboBox->setEnabled(false);
 
     m_mealsToolBar = addToolBar(tr("&Meal"));
     m_mealsToolBar->addWidget(m_mealsComboBox);
@@ -281,4 +296,22 @@ void SheetWindow::createModels()
     m_mealsModel = new MealsModel(QSqlDatabase::database(m_connectionName), this);
     connect(m_mealsModel, &QAbstractItemModel::modelReset,
             this, &SheetWindow::onMealModelReset);
+}
+
+void SheetWindow::sheetIsEmpty()
+{
+    m_mealsComboBox->setEnabled(false);
+    m_ui->renameMealAction->setEnabled(false);
+    m_ui->deleteMealAction->setEnabled(false);
+    m_ui->addFoodAction->setEnabled(false);
+    m_ui->duplicateMealAction->setEnabled(false);
+}
+
+void SheetWindow::sheetIsNonEmpty()
+{
+    m_mealsComboBox->setEnabled(true);
+    m_ui->renameMealAction->setEnabled(true);
+    m_ui->deleteMealAction->setEnabled(true);
+    m_ui->addFoodAction->setEnabled(true);
+    m_ui->duplicateMealAction->setEnabled(true);
 }

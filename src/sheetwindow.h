@@ -20,11 +20,13 @@ public:
     ~SheetWindow();
 
 private slots:
+    void onDeleteMeal();
     void onNewMeal();
     void onRenameMeal();
     void onMealModelReset();
 
 signals:
+    void mealDeleted(int row);
     void mealNameChanged(int row, const QString &newMealName);
 
 private:
@@ -36,14 +38,17 @@ private:
     void createToolBars();
     void createModels();
 
+    void sheetIsEmpty();
+    void sheetIsNonEmpty();
+
     Ui::SheetWindow *m_ui;
     QToolBar *m_sheetToolBar;
     QToolBar *m_mealsToolBar;
     QComboBox *m_mealsComboBox;
 
     MealsModel *m_mealsModel;
-    int lastMealIndex;
-    bool restoreMealIndex;
+    int storedMealIndex;    // For restoring/adjusting selected meal after model reset
+    bool restoreMealIndex;  // "
 
     QString m_connectionName;  // DB conn. name, unique to each running sheet
     QString m_sheetPath;
