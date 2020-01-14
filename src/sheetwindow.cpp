@@ -17,11 +17,15 @@
 // Ugly workaround for the meals model resetting the combo box selection.
 // We write to this variable before renaming a meal, and read from it
 // after the model has updated and reset the view.
-static int tempMealIndex;
+static int tempMealIndex = 0;
 
 
 SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
-    : QMainWindow(parent), m_ui(new Ui::SheetWindow), m_sheetPath(sheetPath)
+    : QMainWindow(parent),
+      m_ui(new Ui::SheetWindow),
+      lastMealIndex(0),
+      restoreMealIndex(false),
+      m_sheetPath(sheetPath)
 {
     // using QSettings: if default sheet is set, update m_sheetPath here
 
@@ -79,14 +83,23 @@ void SheetWindow::onNewMeal()
 void SheetWindow::onRenameMeal()
 {
     QString currentMealName = m_mealsComboBox->currentText();
-    bool mealRenameOk;
+    bool okToProceed;
     QString newMealName = QInputDialog::getText(
                 this, tr("Rename Meal"), tr("Meal name:"),
-                QLineEdit::Normal, currentMealName, &mealRenameOk);
+                QLineEdit::Normal, currentMealName, &okToProceed);
 
-    if (mealRenameOk && newMealName != currentMealName) {
-        tempMealIndex = m_mealsComboBox->currentIndex();
+    if (okToProceed && newMealName != currentMealName) {
+        lastMealIndex = m_mealsComboBox->currentIndex();
+        restoreMealIndex = true;
         emit mealNameChanged(m_mealsComboBox->currentIndex(), newMealName);
+    }
+}
+
+void SheetWindow::onMealModelReset()
+{
+    if (restoreMealIndex) {
+        m_mealsComboBox->setCurrentIndex(lastMealIndex);
+        restoreMealIndex = false;
     }
 }
 
@@ -257,7 +270,6 @@ void SheetWindow::createToolBars()
 void SheetWindow::createModels()
 {
     m_mealsModel = new MealsModel(QSqlDatabase::database(m_connectionName), this);
-    connect(m_mealsModel, &QAbstractItemModel::modelReset, this, [this]() {
-       m_mealsComboBox->setCurrentIndex(tempMealIndex);
-    });
+    connect(m_mealsModel, &QAbstractItemModel::modelReset,
+            this, &SheetWindow::onMealModelReset);
 }

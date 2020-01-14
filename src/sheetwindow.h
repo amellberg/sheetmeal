@@ -22,6 +22,7 @@ public:
 private slots:
     void onNewMeal();
     void onRenameMeal();
+    void onMealModelReset();
 
 signals:
     void mealNameChanged(int row, const QString &newMealName);
@@ -41,6 +42,8 @@ private:
     QComboBox *m_mealsComboBox;
 
     MealsModel *m_mealsModel;
+    int lastMealIndex;
+    bool restoreMealIndex;
 
     QString m_connectionName;  // DB conn. name, unique to each running sheet
     QString m_sheetPath;
