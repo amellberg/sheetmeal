@@ -4,6 +4,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QSqlDatabase>
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QTemporaryFile>
 #include <QToolBar>
@@ -12,12 +13,6 @@
 #include "mealsmodel.h"
 #include "sheetwindow.h"
 #include "ui_sheetwindow.h"
-
-
-// Ugly workaround for the meals model resetting the combo box selection.
-// We write to this variable before renaming a meal, and read from it
-// after the model has updated and reset the view.
-static int tempMealIndex = 0;
 
 
 SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
@@ -49,9 +44,6 @@ SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     createModels();
     createToolBars();
     setupActions();
-
-//    connect(m_mealToolBar, &MealToolBar::mealNameChanged,
-//            m_mealsModel, &MealsModel::onMealNameChanged);
 }
 
 SheetWindow::~SheetWindow()
@@ -131,6 +123,7 @@ bool SheetWindow::createDatabaseConnection()
                     QMessageBox::Close);
         return false;
     }
+    db.exec("PRAGMA foreign_keys = ON;");
     return true;
 }
 
@@ -159,11 +152,27 @@ void SheetWindow::initializeSheet()
 
     query.exec("CREATE TABLE mealcontents ("
                "id INTEGER PRIMARY KEY, "
-               "mealid TEXT NOT NULL, "
-               "foodid TEXT NOT NULL, "
+               "mealid INTEGER NOT NULL, "
+               "foodid INTEGER NOT NULL, "
                "weight INTEGER NOT NULL, "
-               "FOREIGN KEY (mealid) REFERENCES meals (id), "
-               "FOREIGN KEY (foodid) REFERENCES food (id))");
+               "FOREIGN KEY (mealid) REFERENCES meals (id) ON DELETE CASCADE, "
+               "FOREIGN KEY (foodid) REFERENCES fooditems (id) ON DELETE CASCADE)");
+
+    // Some test data
+    /*
+    query.exec("INSERT INTO fooditems (name, carbs, fat, protein, kcal) "
+               "VALUES ('Mellanmjölk', 34.2, 3.3, 11, 194.5)");
+    query.exec("INSERT INTO fooditems (name, carbs, fat, protein, kcal) "
+               "VALUES ('Knäckebröd', 49.3, 1.3, 5.3, 326.1)");
+    query.exec("INSERT INTO meals (name) VALUES ('Breakfast')");
+    query.exec("INSERT INTO meals (name) VALUES ('Lunch')");
+    query.exec("INSERT INTO mealcontents (mealid, foodid, weight) VALUES (1, 1, 175)");
+    query.exec("INSERT INTO mealcontents (mealid, foodid, weight) VALUES (1, 2, 45)");
+    query.exec("INSERT INTO mealcontents (mealid, foodid, weight) VALUES (2, 1, 150)");
+
+    query.exec("DELETE FROM meals WHERE id = 1");
+    qDebug() << query.lastError();
+    */
 }
 
 void SheetWindow::setupActions()
