@@ -1,6 +1,7 @@
 #include <QHeaderView>
 
 #include "mealtable.h"
+//#include "currentmealmodel.h"
 
 
 MealTable::MealTable(QWidget *parent)

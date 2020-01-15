@@ -9,7 +9,9 @@ namespace Ui {
 
 class QComboBox;
 class MealsModel;
+class CurrentMealModel;
 class MealToolBar;
+
 
 class SheetWindow : public QMainWindow
 {
@@ -23,7 +25,7 @@ private slots:
     void onDeleteMeal();
     void onNewMeal();
     void onRenameMeal();
-    void onMealModelReset();
+    void onMealsModelReset();
 
 signals:
     void mealDeleted(int row);
@@ -47,11 +49,12 @@ private:
     QComboBox *m_mealsComboBox;
 
     MealsModel *m_mealsModel;
-    int storedMealIndex;    // For restoring/adjusting selected meal after model reset
-    bool restoreMealIndex;  // "
+    int m_storedMealIndex;    // For restoring/adjusting selected meal after model reset
+    bool m_restoreMealIndex;  // "
+    CurrentMealModel *m_currentMealModel;
 
-    QString m_connectionName;  // DB conn. name, unique to each running sheet
-    QString m_sheetPath;
+    QString m_dbConnectionName;  // Unique to each running sheet
+    QString m_sheetPath;         // Path to sheet DB file
 };
 
 #endif // SHEETWINDOW_H

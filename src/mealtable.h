@@ -3,6 +3,7 @@
 
 #include <QTableView>
 
+
 class MealTable : public QTableView
 {
     Q_OBJECT

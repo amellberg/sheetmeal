@@ -10,16 +10,17 @@
 #include <QToolBar>
 #include <QUuid>
 
-#include "mealsmodel.h"
 #include "sheetwindow.h"
 #include "ui_sheetwindow.h"
+#include "mealsmodel.h"
+#include "currentmealmodel.h"
 
 
 SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     : QMainWindow(parent),
       m_ui(new Ui::SheetWindow),
-      storedMealIndex(0),
-      restoreMealIndex(false),
+      m_storedMealIndex(0),
+      m_restoreMealIndex(false),
       m_sheetPath(sheetPath)
 {
     // using QSettings: if default sheet is set, update m_sheetPath here
@@ -44,19 +45,20 @@ SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     createModels();
     createToolBars();
     setupActions();
-
     sheetIsEmpty();
+
+    m_ui->mealTable->setModel(m_currentMealModel);
 }
 
 SheetWindow::~SheetWindow()
 {
     {
-        auto db = QSqlDatabase::database(m_connectionName);
+        auto db = QSqlDatabase::database(m_dbConnectionName);
         if (db.isOpen()) {
             db.close();
         }
     }
-    QSqlDatabase::removeDatabase(m_connectionName);
+    QSqlDatabase::removeDatabase(m_dbConnectionName);
 
     delete m_ui;
 }
@@ -77,11 +79,11 @@ void SheetWindow::onDeleteMeal()
     if (numMeals == 1) {
         sheetIsEmpty();
     } else if (numMeals > 1) {
-        storedMealIndex = m_mealsComboBox->currentIndex();
-        if (storedMealIndex == numMeals - 1) {
-            storedMealIndex--;
+        m_storedMealIndex = m_mealsComboBox->currentIndex();
+        if (m_storedMealIndex == numMeals - 1) {
+            m_storedMealIndex--;
         }
-        restoreMealIndex = true;
+        m_restoreMealIndex = true;
     }
     emit mealDeleted(m_mealsComboBox->currentIndex());
 }
@@ -104,17 +106,17 @@ void SheetWindow::onRenameMeal()
                 QLineEdit::Normal, currentMealName, &okToProceed);
 
     if (okToProceed && newMealName != currentMealName) {
-        storedMealIndex = m_mealsComboBox->currentIndex();
-        restoreMealIndex = true;
+        m_storedMealIndex = m_mealsComboBox->currentIndex();
+        m_restoreMealIndex = true;
         emit mealNameChanged(m_mealsComboBox->currentIndex(), newMealName);
     }
 }
 
-void SheetWindow::onMealModelReset()
+void SheetWindow::onMealsModelReset()
 {
-    if (restoreMealIndex) {
-        m_mealsComboBox->setCurrentIndex(storedMealIndex);
-        restoreMealIndex = false;
+    if (m_restoreMealIndex) {
+        m_mealsComboBox->setCurrentIndex(m_storedMealIndex);
+        m_restoreMealIndex = false;
     }
 }
 
@@ -136,8 +138,8 @@ bool SheetWindow::createTemporarySheetPath()
 
 bool SheetWindow::createDatabaseConnection()
 {
-    m_connectionName = QUuid::createUuid().toString();
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
+    m_dbConnectionName = QUuid::createUuid().toString();
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", m_dbConnectionName);
     db.setDatabaseName(m_sheetPath);
     if (!db.open()) {
         QMessageBox::critical(
@@ -152,7 +154,7 @@ bool SheetWindow::createDatabaseConnection()
 
 void SheetWindow::initializeSheet()
 {
-    QSqlQuery query(QSqlDatabase::database(m_connectionName));
+    QSqlQuery query(QSqlDatabase::database(m_dbConnectionName));
 
     // Table 'sheet' stores some extra data; can contain at most one row
     query.exec("CREATE TABLE sheet ("
@@ -303,9 +305,11 @@ void SheetWindow::createToolBars()
 
 void SheetWindow::createModels()
 {
-    m_mealsModel = new MealsModel(QSqlDatabase::database(m_connectionName), this);
+    m_mealsModel = new MealsModel(QSqlDatabase::database(m_dbConnectionName), this);
     connect(m_mealsModel, &QAbstractItemModel::modelReset,
-            this, &SheetWindow::onMealModelReset);
+            this, &SheetWindow::onMealsModelReset);
+
+    m_currentMealModel = new CurrentMealModel(m_dbConnectionName, this);
 }
 
 void SheetWindow::sheetIsEmpty()
