@@ -14,7 +14,6 @@ MealsModel::MealsModel(QSqlDatabase db, QObject *parent)
 
 void MealsModel::onDeleteMeal(int row)
 {
-    qDebug() << "in MealsModel::onDeleteMeal";
     QModelIndex idx = index(row, fieldIndex("name"));
     removeRows(idx.row(), 1);
     submitAll();

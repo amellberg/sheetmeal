@@ -63,6 +63,16 @@ SheetWindow::~SheetWindow()
 
 void SheetWindow::onDeleteMeal()
 {
+    auto answer = QMessageBox::question(
+                this,
+                tr("Delete Meal"),
+                tr("Permanently delete meal ") + m_mealsComboBox->currentText() + "?",
+                QMessageBox::Yes | QMessageBox::Cancel,
+                QMessageBox::Yes);
+    if (answer == QMessageBox::Cancel) {
+        return;
+    }
+
     int numMeals = m_mealsComboBox->count();
     if (numMeals == 1) {
         sheetIsEmpty();
@@ -183,8 +193,8 @@ void SheetWindow::initializeSheet()
     query.exec("INSERT INTO mealcontents (mealid, foodid, weight) VALUES (1, 2, 45)");
     query.exec("INSERT INTO mealcontents (mealid, foodid, weight) VALUES (2, 1, 150)");
 
-    query.exec("DELETE FROM meals WHERE id = 1");
-    qDebug() << query.lastError();
+//    query.exec("DELETE FROM meals WHERE id = 1");
+//    qDebug() << query.lastError();
     */
 }
 
@@ -304,7 +314,9 @@ void SheetWindow::sheetIsEmpty()
     m_ui->renameMealAction->setEnabled(false);
     m_ui->deleteMealAction->setEnabled(false);
     m_ui->addFoodAction->setEnabled(false);
+    m_ui->removeFoodAction->setEnabled(false);
     m_ui->duplicateMealAction->setEnabled(false);
+    m_ui->clearMealAction->setEnabled(false);
 }
 
 void SheetWindow::sheetIsNonEmpty()
