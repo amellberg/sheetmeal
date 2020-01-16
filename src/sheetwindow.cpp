@@ -45,9 +45,10 @@ SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     createModels();
     createToolBars();
     setupActions();
-    sheetIsEmpty();
+    sheetIsNonEmpty();
 
     m_ui->mealTable->setModel(m_currentMealModel);
+    resize(800, 600);
 }
 
 SheetWindow::~SheetWindow()
@@ -148,13 +149,13 @@ bool SheetWindow::createDatabaseConnection()
                     QMessageBox::Close);
         return false;
     }
-    db.exec("PRAGMA foreign_keys = ON;");
     return true;
 }
 
 void SheetWindow::initializeSheet()
 {
     QSqlQuery query(QSqlDatabase::database(m_dbConnectionName));
+    query.exec("PRAGMA foreign_keys = true");
 
     // Table 'sheet' stores some extra data; can contain at most one row
     query.exec("CREATE TABLE sheet ("
@@ -195,8 +196,8 @@ void SheetWindow::initializeSheet()
     query.exec("INSERT INTO mealcontents (mealid, foodid, weight) VALUES (1, 2, 45)");
     query.exec("INSERT INTO mealcontents (mealid, foodid, weight) VALUES (2, 1, 150)");
 
-//    query.exec("DELETE FROM meals WHERE id = 1");
-//    qDebug() << query.lastError();
+    query.exec("DELETE FROM meals WHERE id = 1");
+    qDebug() << query.lastError();
     */
 }
 

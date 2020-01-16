@@ -9,6 +9,7 @@ MealsModel::MealsModel(QSqlDatabase db, QObject *parent)
     : QSqlTableModel(parent, db)
 {
     setTable("meals");
+    select();
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
 
