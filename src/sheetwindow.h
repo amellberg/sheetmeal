@@ -27,11 +27,13 @@ private slots:
     void onDeleteMeal();
     void onNewMeal();
     void onRenameMeal();
+    void onMealSwitch(int index);
     void onMealsModelReset();
 
 signals:
     void mealDeleted(int row);
     void mealNameChanged(int row, const QString &newMealName);
+    void mealSwitched(int mealId);
 
 private:
     bool createTemporarySheetPath();

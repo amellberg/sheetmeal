@@ -6,6 +6,7 @@
 #include <QSplitter>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QSqlIndex>
 #include <QSqlQuery>
 #include <QTemporaryFile>
 #include <QToolBar>
@@ -40,17 +41,20 @@ SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
         return;
     }
 
-    if (sheetPath.isEmpty()) {
-        initializeSheet();
-    }
-
     m_ui->setupUi(this);
     createModels();
     createToolBars();
     createMainLayout();
     setupActions();
-    sheetIsNonEmpty();
 
+    if (sheetPath.isEmpty()) {
+        initializeSheet();
+    } else {
+        onMealSwitch(0);
+    }
+
+//    onMealSwitch(0);
+    sheetIsNonEmpty();
     resize(700, 500);
 }
 
@@ -114,6 +118,12 @@ void SheetWindow::onRenameMeal()
         m_restoreMealIndex = true;
         emit mealNameChanged(m_mealsComboBox->currentIndex(), newMealName);
     }
+}
+
+void SheetWindow::onMealSwitch(int index)
+{
+    int mealId = m_mealsModel->record(index).value("id").toInt();
+    emit mealSwitched(mealId);
 }
 
 void SheetWindow::onMealsModelReset()
@@ -296,7 +306,8 @@ void SheetWindow::createToolBars()
     m_mealsComboBox->setModelColumn(1);  // Display 'name' column
     m_mealsComboBox->setMinimumWidth(125);
     m_mealsComboBox->setInsertPolicy(QComboBox::NoInsert);
-//    m_mealsComboBox->setEnabled(false);
+    connect(m_mealsComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(onMealSwitch(int)));
 
     m_mealsToolBar = addToolBar(tr("&Meal"));
     m_mealsToolBar->addWidget(m_mealsComboBox);
@@ -325,6 +336,7 @@ void SheetWindow::createModels()
             this, &SheetWindow::onMealsModelReset);
 
     m_currentMealModel = new CurrentMealModel(m_dbConnectionName, this);
+    connect(this, SIGNAL(mealSwitched(int)), m_currentMealModel, SLOT(populate(int)));
 }
 
 void SheetWindow::sheetIsEmpty()
