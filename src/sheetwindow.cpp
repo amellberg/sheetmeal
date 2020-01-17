@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QSplitter>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -14,6 +15,8 @@
 #include "ui_sheetwindow.h"
 #include "mealsmodel.h"
 #include "currentmealmodel.h"
+#include "mealtable.h"
+#include "totalstable.h"
 
 
 SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
@@ -44,11 +47,11 @@ SheetWindow::SheetWindow(QString sheetPath, QWidget *parent)
     m_ui->setupUi(this);
     createModels();
     createToolBars();
+    createMainLayout();
     setupActions();
     sheetIsNonEmpty();
 
-    m_ui->mealTable->setModel(m_currentMealModel);
-    resize(800, 600);
+    resize(700, 500);
 }
 
 SheetWindow::~SheetWindow()
@@ -302,6 +305,17 @@ void SheetWindow::createToolBars()
     m_mealsToolBar->addAction(m_ui->renameMealAction);
     m_mealsToolBar->addAction(m_ui->addFoodAction);
     m_mealsToolBar->addAction(m_ui->removeFoodAction);
+}
+
+void SheetWindow::createMainLayout()
+{
+    QSplitter *splitter = new QSplitter;
+    splitter->setOrientation(Qt::Vertical);
+    setCentralWidget(splitter);
+    m_mealTable = new MealTable(m_currentMealModel);
+    m_totalsTable = new TotalsTable;  // TODO: pass model
+    splitter->addWidget(m_mealTable);
+    splitter->addWidget(m_totalsTable);
 }
 
 void SheetWindow::createModels()

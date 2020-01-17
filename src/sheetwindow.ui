@@ -14,17 +14,7 @@
    <string>SheetMeal</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QSplitter" name="splitter">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <widget class="MealTable" name="mealTable"/>
-      <widget class="TotalsTable" name="totalsTable"/>
-     </widget>
-    </item>
-   </layout>
+   <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -258,18 +248,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>MealTable</class>
-   <extends>QTableView</extends>
-   <header>mealtable.h</header>
-  </customwidget>
-  <customwidget>
-   <class>TotalsTable</class>
-   <extends>QTableView</extends>
-   <header>totalstable.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

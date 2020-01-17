@@ -3,12 +3,13 @@
 
 #include <QTableView>
 
+class QAbstractItemModel;
 
 class MealTable : public QTableView
 {
     Q_OBJECT
 public:
-    MealTable(QWidget *parent = nullptr);
+    MealTable(QAbstractItemModel *model, QWidget *parent = nullptr);
 };
 
 #endif // MEALTABLE_H

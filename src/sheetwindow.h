@@ -8,6 +8,8 @@ namespace Ui {
 }
 
 class QComboBox;
+class MealTable;
+class TotalsTable;
 class MealsModel;
 class CurrentMealModel;
 class MealToolBar;
@@ -38,12 +40,15 @@ private:
 
     void setupActions();
     void createToolBars();
+    void createMainLayout();
     void createModels();
 
     void sheetIsEmpty();
     void sheetIsNonEmpty();
 
     Ui::SheetWindow *m_ui;
+    MealTable *m_mealTable;
+    TotalsTable *m_totalsTable;
     QToolBar *m_sheetToolBar;
     QToolBar *m_mealsToolBar;
     QComboBox *m_mealsComboBox;
